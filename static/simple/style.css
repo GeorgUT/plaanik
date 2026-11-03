@@ -1,0 +1,68 @@
+/* Lihtne kujundus: süsteemifont, standardsed vormid ja tabelid. */
+:root { color-scheme: light; font-family: Arial, sans-serif; color: #25312e; background: #f5f6f5; }
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.5; }
+main { max-width: 1100px; margin: 36px auto; padding: 0 24px; }
+h1 { font-size: 30px; margin: 0; }
+header p { margin: 6px 0 26px; color: #59645f; }
+h2 { font-size: 19px; margin: 0 0 18px; }
+section { background: white; border: 1px solid #dce1de; border-radius: 5px; padding: 24px; margin-bottom: 20px; }
+label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: bold; }
+input, select, button { font: inherit; border: 1px solid #b7c1ba; border-radius: 4px; min-height: 38px; padding: 7px 10px; }
+input, select { background: white; color: #25312e; width: 100%; min-width: 0; }
+button { background: #2b6a4e; color: white; cursor: pointer; border-color: #2b6a4e; white-space: nowrap; }
+button:hover { background: #20543d; }
+button:disabled { opacity: .6; cursor: wait; }
+button.secondary { background: white; color: #2b6049; }
+button.secondary:hover { background: #f1f5f2; }
+:focus-visible { outline: 3px solid #83b19a; outline-offset: 2px; }
+.subject-form { max-width: 430px; margin-bottom: 22px; }
+.inline { display: flex; gap: 8px; margin-top: 5px; }
+.fields { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 14px; align-items: end; }
+.table-scroll { overflow-x: auto; margin-top: 24px; }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+th { color: #59645f; font-weight: bold; background: #f6f8f6; }
+th, td { padding: 11px 9px; border-bottom: 1px solid #e3e7e4; }
+td { overflow-wrap: anywhere; }
+td input[type="checkbox"] { width: 17px; min-height: 17px; height: 17px; accent-color: #2b6a4e; cursor: pointer; }
+tr.done td:not(:first-child):not(:last-child) { color: #717b75; text-decoration: line-through; }
+.delete { color: #a43832 !important; border: 0; background: transparent !important; padding: 4px; min-height: 30px; font-size: 13px; }
+.delete:hover { text-decoration: underline; }
+.muted, footer { color: #657169; font-size: 13px; }
+p.muted { margin: -6px 0 16px; }
+#task-summary { margin: 12px 0 0; }
+.availability { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px; }
+.day-availability { padding: 10px; border: 1px solid #e0e5e1; border-radius: 3px; }
+.day-toggle { flex-direction: row; align-items: center; gap: 6px; margin-bottom: 10px; }
+.day-toggle input { width: 15px; height: 15px; min-height: 15px; accent-color: #2b6a4e; }
+.day-availability label:not(.day-toggle) { font-size: 11px; font-weight: normal; margin-top: 6px; }
+.day-availability input[type="time"] { padding: 5px; font-size: 12px; }
+input:disabled { color: #89938c; background: #f5f6f5; }
+.schedule-controls { display: flex; align-items: end; gap: 12px; margin-bottom: 20px; }
+.empty { background: #f6f8f6; padding: 20px; color: #657169; font-size: 14px; }
+.schedule-day { border-top: 1px solid #e0e5e1; padding: 12px 0; }
+.schedule-day h3 { font-size: 14px; margin: 0 0 8px; }
+.session { display: flex; align-items: baseline; gap: 20px; padding: 7px 10px; margin-top: 5px; background: #f1f6f2; border-left: 3px solid #699a7c; font-size: 14px; }
+.session time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.session small { color: #657169; }
+.rest { margin: 0; color: #657169; font-size: 13px; }
+.notice { padding: 12px 15px; margin-bottom: 16px; border: 1px solid #d2dfd4; background: #f0f6f1; font-size: 14px; }
+.notice.warning { background: #fff9ed; border-color: #e6d4ad; }
+.notice p { margin: 0; }
+.notice ul { margin: 8px 0 0; padding-left: 20px; }
+footer { margin: 20px 0; }
+#message { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 12px 20px; background: #253d30; color: white; border-radius: 4px; font-size: 14px; z-index: 2; }
+#message:empty { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 850px) { .availability { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 600px) {
+  main { padding: 0 14px; margin: 22px auto; }
+  section { padding: 18px 14px; }
+  .fields { grid-template-columns: 1fr 1fr; }
+  .wide { grid-column: 1 / -1; grid-row: 1; }
+  .availability { grid-template-columns: repeat(2, 1fr); }
+  table { min-width: 690px; }
+  .schedule-controls { flex-wrap: wrap; }
+  .session { flex-direction: column; gap: 2px; }
+  .inline { flex-wrap: wrap; }
+}
