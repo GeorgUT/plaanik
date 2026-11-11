@@ -3,102 +3,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Plaanik aitab sul ülesanded ja vaba aja selgeks õpinädalaks muuta.">
-  <title>Plaanik — sinu õpinädal</title>
+  <meta name="description" content="Lihtne kohalik õppeplaneerija tudengile.">
+  <title>Plaanik — õppeplaneerija</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="dashboard.js"></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <aside class="sidebar">
-    <a class="brand" href="/" aria-label="Plaanik — avaleht"><span data-icon="calendar"></span><span>plaanik<small>ÕPPEPLANEERIJA</small></span></a>
-    <nav aria-label="Peamenüü">
-      <button class="nav-item active" id="week-nav" type="button" aria-current="page"><span data-icon="calendar"></span>Minu nädal</button>
-      <button class="nav-item" id="tasks-nav" type="button"><span data-icon="tasks"></span>Ülesanded</button>
-    </nav>
-    <div class="subjects-section">
-      <h2>MINU ÕPPEAINED</h2>
-      <div id="subject-list"></div>
-      <button class="subject-add" type="button" id="new-subject"><span class="plus-circle" data-icon="plus"></span>Lisa õppeaine</button>
-    </div>
-    <div class="sidebar-bottom">
-      <div id="demo-note" hidden>Näidisandmed <button type="button" id="clear-demo">Eemalda</button></div>
-      <p><strong>Üks samm korraga.</strong><br>Hea plaan jätab aega ka puhkuseks.</p>
-      <a href="/simple/">Ava lihtne versioon</a>
-    </div>
-  </aside>
-
   <main>
-    <header class="page-header">
-      <p id="today-date"></p>
-      <h1 id="page-title">Sinu nädal, sinu tempos.</h1>
-      <p class="subtitle" id="page-subtitle">Vähem planeerimist. Rohkem tehtud.</p>
+    <header>
+      <h1>Plaanik</h1>
+      <p>Lisa ülesanded, määra vaba aeg ja koosta oma õpinädal.</p>
     </header>
-    <dl class="stats" aria-label="Nädala kokkuvõte">
-      <div><dt>Õppida sel nädalal</dt><dd id="study-total">0 h</dd></div>
-      <div><dt>Ülesandeid</dt><dd id="task-total">0</dd></div>
-      <div><dt>Vaba õppeaega</dt><dd id="free-total">15 h</dd></div>
-    </dl>
 
-    <section class="calendar-panel panel" id="calendar-panel" aria-label="Nädala õpigraafik">
-      <div class="calendar-toolbar">
-        <div class="week-controls">
-          <button class="icon-button" id="previous-week" aria-label="Eelmine nädal" type="button"><span data-icon="left"></span></button>
-          <button id="this-week" type="button">Täna</button>
-          <button class="icon-button" id="next-week" aria-label="Järgmine nädal" type="button"><span data-icon="right"></span></button>
+    <section aria-labelledby="tasks-heading">
+      <h2 id="tasks-heading">1. Õppeained ja ülesanded</h2>
+      <form id="subject-form" class="subject-form">
+        <label for="subject-name">Uus õppeaine</label>
+        <div class="inline">
+          <input id="subject-name" name="name" placeholder="Näiteks matemaatika" maxlength="60" required>
+          <button type="submit" class="secondary">Lisa õppeaine</button>
         </div>
-        <h2 id="week-label"></h2>
-        <div class="calendar-actions">
-          <button type="button" id="edit-time">Muuda vaba aega</button>
-          <button class="primary" type="button" id="generate"><span data-icon="sparkle"></span><span>Koosta õpigraafik</span></button>
+      </form>
+      <form id="task-form">
+        <div class="fields">
+          <label>Õppeaine<select id="task-subject" name="subject" required></select></label>
+          <label class="wide">Ülesanne<input id="task-title" name="title" placeholder="Näiteks: lahenda harjutused 1–5" maxlength="120" required></label>
+          <label>Tähtaeg<input id="task-deadline" type="date" name="deadline" required></label>
+          <label>Ajakulu (tundi)<input type="number" name="hours" min="0.25" max="100" step="0.25" value="2" required></label>
+          <label>Prioriteet<select name="priority"><option value="high">Kõrge</option><option value="medium" selected>Keskmine</option><option value="low">Madal</option></select></label>
+          <button type="submit" id="add-task">Lisa ülesanne</button>
         </div>
+      </form>
+      <div class="table-scroll">
+        <table>
+          <caption class="sr-only">Sinu ülesanded</caption>
+          <thead><tr><th scope="col">Tehtud</th><th scope="col">Ülesanne</th><th scope="col">Õppeaine</th><th scope="col">Tähtaeg</th><th scope="col">Ajakulu</th><th scope="col">Prioriteet</th><th scope="col"><span class="sr-only">Toimingud</span></th></tr></thead>
+          <tbody id="task-list"></tbody>
+        </table>
       </div>
+      <p id="task-summary" class="muted"></p>
+    </section>
+
+    <section aria-labelledby="time-heading">
+      <h2 id="time-heading">2. Vaba aeg õppimiseks</h2>
+      <p class="muted">Vali nädalapäevad ja ajavahemikud, millal saad õppida.</p>
+      <form id="availability-form">
+        <div id="availability" class="availability"></div>
+        <button type="submit" class="secondary">Salvesta vaba aeg</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading">3. Sinu õpigraafik</h2>
+      <form id="schedule-form" class="schedule-controls">
+        <label>Nädal alates<input id="week-start" type="date" required></label>
+        <button type="submit" id="generate">Koosta õpigraafik</button>
+      </form>
+      <p class="muted">Graafik eelistab varasemaid tähtaegu, seejärel kõrgemat prioriteeti. Kuni 90 minutit õppimist ja 15 minutit pausi.</p>
       <div id="schedule-notice" role="status"></div>
-      <div class="calendar-scroll"><div id="calendar" class="calendar"></div></div>
-      <div id="calendar-empty" class="calendar-empty" hidden><p>Siit algab sinu õpinädal.</p><span>Lisa ülesanded ja koosta neile sobiv õpigraafik.</span></div>
+      <div id="schedule"><p class="empty">Graafik ilmub siia, kui oled lisanud ülesanded ja vajutad „Koosta õpigraafik”.</p></div>
     </section>
-
-    <section class="tasks-panel panel" aria-labelledby="tasks-heading">
-      <div class="tasks-toolbar">
-        <h2 id="tasks-heading">Järgmisena laual</h2>
-        <button type="button" id="new-task"><span data-icon="plus"></span>Lisa ülesanne</button>
-      </div>
-      <div id="task-list"></div>
-      <div class="tasks-bottom" id="tasks-bottom" hidden><span id="tasks-summary"></span><button class="text-button" type="button" id="all-tasks">Vaata kõiki ülesandeid</button></div>
-    </section>
-    <footer>Sinu andmed salvestatakse selles brauseris.</footer>
+    <footer>Andmed salvestatakse ainult sellesse brauserisse. Graafiku koostab Python; masinõpet see versioon ei kasuta.</footer>
+    <p id="message" role="status" aria-live="polite"></p>
   </main>
-
-  <dialog id="task-dialog" aria-labelledby="task-dialog-title">
-    <form id="task-form">
-      <div class="dialog-header"><h2 id="task-dialog-title">Lisa ülesanne</h2><button class="icon-button" data-close type="button" aria-label="Sulge"><span data-icon="close"></span></button></div>
-      <label>Ülesanne<input name="title" id="task-title" autofocus placeholder="Näiteks: lineaaralgebra harjutused" maxlength="120" required></label>
-      <label>Õppeaine<select name="subject" id="task-subject" required></select></label>
-      <div class="form-grid"><label>Tähtaeg<input name="deadline" id="task-deadline" type="date" required></label><label>Ajakulu (tundi)<input name="hours" type="number" min="0.25" max="100" step="0.25" value="2" required></label></div>
-      <label>Prioriteet<select name="priority"><option value="high">Kõrge</option><option value="medium" selected>Keskmine</option><option value="low">Madal</option></select></label>
-      <p class="form-error" id="task-error" role="alert"></p>
-      <div class="dialog-footer"><button type="button" class="danger text-button" id="delete-task" hidden>Kustuta ülesanne</button><span class="spacer"></span><button type="button" data-close>Tühista</button><button type="submit" class="primary">Salvesta ülesanne</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="subject-dialog" aria-labelledby="subject-dialog-title">
-    <form id="subject-form">
-      <div class="dialog-header"><h2 id="subject-dialog-title">Lisa õppeaine</h2><button class="icon-button" data-close type="button" aria-label="Sulge"><span data-icon="close"></span></button></div>
-      <label>Õppeaine nimi<input name="name" id="subject-name" autofocus placeholder="Näiteks: füüsika" maxlength="60" required></label>
-      <p class="form-error" id="subject-error" role="alert"></p>
-      <div class="dialog-footer"><button type="button" data-close>Tühista</button><button type="submit" class="primary">Lisa õppeaine</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="time-dialog" aria-labelledby="time-dialog-title">
-    <form id="availability-form">
-      <div class="dialog-header"><h2 id="time-dialog-title">Vaba aeg õppimiseks</h2><button class="icon-button" data-close type="button" aria-label="Sulge"><span data-icon="close"></span></button></div>
-      <p class="dialog-description">Vali ajad, millal saad igal nädalal õppida. Graafik jätab kuni 90-minutiliste plokkide vahele 15 minutit puhkust.</p>
-      <div id="availability"></div>
-      <p class="form-error" id="time-error" role="alert"></p>
-      <div class="dialog-footer"><button type="button" data-close>Tühista</button><button type="submit" class="primary">Salvesta vaba aeg</button></div>
-    </form>
-  </dialog>
-  <p id="message" class="toast" role="status" aria-live="polite"></p>
 </body>
 </html>

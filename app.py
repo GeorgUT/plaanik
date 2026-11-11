@@ -1,4 +1,8 @@
-"""Plaaniku kohalik veebiserver. Vajab ainult Python 3.10+ standardteeki."""
+"""Plaanik – kohalik õppeplaneerija.
+
+Autorid: Georg Henry Piller ja Laura Korberg.
+Vajab ainult Python 3.10+ standardteeki.
+"""
 import argparse
 import json
 from datetime import date, datetime, timedelta
@@ -85,10 +89,14 @@ def make_schedule(data):
 
 
 class Handler(SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path.split('?')[0] == '/':
-            self.path = '/index.html'
-        super().do_GET()
+    def send_head(self):
+        if self.path.split('?', 1)[0] in ('/simple', '/simple/', '/simple/index.html'):
+            self.send_response(302)
+            self.send_header('Location', '/')
+            self.send_header('Content-Length', '0')
+            self.end_headers()
+            return None
+        return super().send_head()
 
     def do_POST(self):
         if self.path != '/api/schedule':
